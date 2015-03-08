@@ -50,33 +50,14 @@
 {
     if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound)
     {
-        // This if clause sees if the back button was pressed or screen was swiped away.  We know this is true because self is no longer
-        // in the navigation stack.
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"List"];
-        
-        // The long way is to create an entity description
-        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%K == %@", @"listName", self.passedListName];
-        
-        // Add Sort Descriptors
-        //[fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"listName" ascending:YES]]];
-        
-        NSError *error = nil;
-        NSArray *result = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-        
-        if (error)
+        if ([[self.tableView visibleCells] count] > 0)
         {
-            NSLog(@"Unable to execute fetch request.");
-            NSLog(@"%@, %@", error, error.localizedDescription);
-            
-        } else
-        {
-            NSLog(@"%@", result);
+            Task *firstTask = [self.fetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            List *listNameRecord = firstTask.thatOwns;
+            BOOL changed = [listNameRecord.taskChanged boolValue];
+            // Notify the fetchedResultsController for Lists that the task for the list at indexPath has changed
+            listNameRecord.taskChanged = @(!changed);
         }
-        
-        List *listNameRecord = result[0];
-        BOOL changed = [listNameRecord.taskChanged boolValue];
-        // Notify the fetchedResultsController for Lists that the task for the list at indexPath has changed
-        listNameRecord.taskChanged = @(!changed);
     }
     [super viewWillDisappear:animated];
 }
