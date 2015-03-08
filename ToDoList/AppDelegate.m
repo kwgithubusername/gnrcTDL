@@ -7,15 +7,32 @@
 //
 
 #import "AppDelegate.h"
-
+#import "TDLViewControllerList.h"
+#import "TDLViewController.h"
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // Fetch Main Storyboard
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
+    // Instantiate Root Navigation Controller
+    UINavigationController *rootNavigationController = (UINavigationController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"rootNavigationController"];
+    
+    // Configure View Controller
+    
+    TDLViewControllerList *viewControllerList = (TDLViewControllerList *)[rootNavigationController topViewController];
+    
+    if ([viewControllerList isKindOfClass:[TDLViewControllerList class]]) {
+        [viewControllerList setManagedObjectContext:self.managedObjectContext];
+
+    }
+    // Configure Window
+    [self.window setRootViewController:rootNavigationController];
     // Override point for customization after application launch.
     return YES;
 }
@@ -26,6 +43,15 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+        NSError *error = nil;
+        
+        if (![self.managedObjectContext save:&error]) {
+            if (error) {
+                NSLog(@"Unable to save changes.");
+                NSLog(@"%@, %@", error, error.localizedDescription);
+            }
+        
+    }
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -39,9 +65,18 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+        NSError *error = nil;
+        
+        if (![self.managedObjectContext save:&error]) {
+            if (error) {
+                NSLog(@"Unable to save changes.");
+                NSLog(@"%@, %@", error, error.localizedDescription);
+            }
+        
+    }
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
-    [self saveContext];
+    //[self saveContext];
 }
 
 #pragma mark - Core Data stack
@@ -60,7 +95,7 @@
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"ToDoList" withExtension:@"momd"];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Model" withExtension:@"momd"];
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
@@ -120,6 +155,19 @@
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
+        }
+    }
+}
+
+#pragma mark -
+#pragma mark Helper Methods
+- (void)saveManagedObjectContext {
+    NSError *error = nil;
+    
+    if (![self.managedObjectContext save:&error]) {
+        if (error) {
+            NSLog(@"Unable to save changes.");
+            NSLog(@"%@, %@", error, error.localizedDescription);
         }
     }
 }
