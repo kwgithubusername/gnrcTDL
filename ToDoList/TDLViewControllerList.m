@@ -12,9 +12,11 @@
 #import <CoreData/Coredata.h>
 #import "ListCell.h"
 #import "List.h"
+#import "TDLViewControllerListDataSource.h"
 
 @interface TDLViewControllerList ()<NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic) TDLViewControllerListDataSource *dataSource;
 
 
 @end
@@ -128,6 +130,40 @@
 
 #pragma mark Table View Delegate Methods
 
+-(void)setupTableView
+{
+    void (^configureCellBlock)(id cell, id indexPath) = ^(ListCell *cell, NSIndexPath *indexPath) {
+        [self configureCell:cell atIndexPath:indexPath];
+    };
+    
+    void (^deleteCellBlock)(id indexPath) = ^(NSIndexPath *indexPath) {
+        
+        List *record = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+        if (record)
+        {
+            [self.fetchedResultsController.managedObjectContext deleteObject:record];
+        }
+        [self saveManagedObjectContext];
+    };
+    
+    NSInteger (^numberOfRowsInSectionBlock)(NSInteger section) = ^NSInteger(NSInteger section) {
+        NSArray *sections = [self.fetchedResultsController sections];
+        id<NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:section];
+        
+        return [sectionInfo numberOfObjects];
+    };
+    
+    NSInteger (^numberOfSectionsBlock)() = ^NSInteger() {
+        return [[self.fetchedResultsController sections] count];
+    };
+    
+    self.dataSource = [[TDLViewControllerListDataSource alloc] initWithConfigureCellBlock:configureCellBlock DeleteCellBlock:deleteCellBlock NumberOfRowsInSectionBlock:numberOfRowsInSectionBlock NumberOfSectionsBlock:numberOfSectionsBlock];
+    
+    self.tableView.dataSource = self.dataSource;
+    self.tableView.delegate = self.dataSource;
+}
+
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
     [self.tableView beginUpdates];
@@ -176,52 +212,6 @@
             break;
         }
     }
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    ListCell *cell = (ListCell *)[tableView dequeueReusableCellWithIdentifier:@"ListCell" forIndexPath:indexPath];
-    
-    // Configure Table View Cell
-    [self configureCell:cell atIndexPath:indexPath];
-    
-    return cell;
-}
-
-// UITableViewDataSource protocol optional method 1
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
-}
-
-// UITableViewDataSource protocol optional method 2
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete)
-    {
-        List *record = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        
-        if (record)
-        {
-            [self.fetchedResultsController.managedObjectContext deleteObject:record];
-        }
-    }
-    [self saveManagedObjectContext];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    NSArray *sections = [self.fetchedResultsController sections];
-    id<NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:section];
-    
-    return [sectionInfo numberOfObjects]; //matched 2 tutorials - has to be correct
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return [[self.fetchedResultsController sections] count]; //matched 2 tutorials - has to be correct
-
 }
 
 - (void)configureCell:(ListCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -308,6 +298,8 @@
         NSLog(@"Unable to perform fetch.");
         NSLog(@"%@, %@", error, error.localizedDescription);
     }
+    
+    [self setupTableView];
 }
 
 - (void)didReceiveMemoryWarning
