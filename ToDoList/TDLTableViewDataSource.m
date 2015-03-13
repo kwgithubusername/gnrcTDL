@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Hi Range. All rights reserved.
 //
 
-#import "TDLViewControllerListDataSource.h"
+#import "TDLTableViewDataSource.h"
 #import "ListCell.h"
-@interface TDLViewControllerListDataSource ()
+@interface TDLTableViewDataSource ()
 
 @property (nonatomic, copy) ConfigureCellBlock configureCellBlock;
 @property (nonatomic, copy) DeleteCellBlock deleteCellBlock;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation TDLViewControllerListDataSource
+@implementation TDLTableViewDataSource
 
 -(id)initWithConfigureCellBlock:(ConfigureCellBlock)aConfigureCellBlock
                 DeleteCellBlock:(DeleteCellBlock)aDeleteCellBlock
@@ -52,12 +52,9 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ListCell *cell = (ListCell *)[tableView dequeueReusableCellWithIdentifier:@"ListCell" forIndexPath:indexPath];
-    
     // Configure Table View Cell
-    self.configureCellBlock(cell, indexPath);
-    
-    return cell;
+    return self.configureCellBlock(indexPath);
+
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -71,7 +68,6 @@
     {
         self.deleteCellBlock(indexPath);
     }
-    //[self saveManagedObjectContext];
 }
 
 @end

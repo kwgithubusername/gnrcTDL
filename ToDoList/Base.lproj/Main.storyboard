@@ -177,10 +177,6 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="L1N-Ln-Qnh" id="yOf-TY-Tyi"/>
-                                    <outlet property="delegate" destination="L1N-Ln-Qnh" id="myZ-7d-jl5"/>
-                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

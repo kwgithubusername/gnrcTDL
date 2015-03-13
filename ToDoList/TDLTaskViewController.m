@@ -13,6 +13,7 @@
 #import "UpdateToDoViewController.h"
 #import "Task.h"
 #import "List.h"
+#import "TDLTableViewDataSource.h"
 // Things wrong with this tutorial:
 // Autolayout was not covered
 // Two navigation controllers instead of one
@@ -29,6 +30,7 @@
 @interface TDLTaskViewController () <NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSIndexPath *selection;
+@property (nonatomic) TDLTableViewDataSource *dataSource;
 
 @end
 
@@ -164,51 +166,86 @@
     }
 }
 
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+-(void)setupTableViewDataSource
 {
-    ToDoCell *cell = (ToDoCell *)[tableView dequeueReusableCellWithIdentifier:@"ToDoCell" forIndexPath:indexPath];
+    ToDoCell* (^configureCellBlock)(id indexPath) = ^ToDoCell*(NSIndexPath *indexPath) {
+        ToDoCell *cell = (ToDoCell *)[self.tableView dequeueReusableCellWithIdentifier:@"ToDoCell" forIndexPath:indexPath];
+        [self configureCell:cell atIndexPath:indexPath];
+        return cell;
+    };
     
-    // Configure Table View Cell
-    [self configureCell:cell atIndexPath:indexPath];
-    
-    return cell;
-}
-
-// UITableViewDataSource protocol method 1
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
-}
-
-// UITableViewDataSource protocol method 2
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete)
-    {
+    void (^deleteCellBlock)(id indexPath) = ^(NSIndexPath *indexPath) {
+        
         Task *record = [self.fetchedResultsController objectAtIndexPath:indexPath];
         
         if (record)
         {
             [self.fetchedResultsController.managedObjectContext deleteObject:record];
         }
-    }
-    [self saveManagedObjectContext];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    NSArray *sections = [self.fetchedResultsController sections];
-    id<NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:section];
+        [self saveManagedObjectContext];
+    };
     
-    return [sectionInfo numberOfObjects];
+    NSInteger (^numberOfRowsInSectionBlock)(NSInteger section) = ^NSInteger(NSInteger section) {
+        
+        NSArray *sections = [self.fetchedResultsController sections];
+        id<NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:section];
+        
+        return [sectionInfo numberOfObjects];
+    };
+    
+    NSInteger (^numberOfSectionsBlock)() = ^NSInteger() {
+        return [[self.fetchedResultsController sections] count];
+    };
+    
+    self.dataSource = [[TDLTableViewDataSource alloc] initWithConfigureCellBlock:configureCellBlock DeleteCellBlock:deleteCellBlock NumberOfRowsInSectionBlock:numberOfRowsInSectionBlock NumberOfSectionsBlock:numberOfSectionsBlock];
+    
+    self.tableView.dataSource = self.dataSource;
+    self.tableView.delegate = self.dataSource;
 }
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return [[self.fetchedResultsController sections] count];
-}
+//
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    ToDoCell *cell = (ToDoCell *)[tableView dequeueReusableCellWithIdentifier:@"ToDoCell" forIndexPath:indexPath];
+//    
+//    // Configure Table View Cell
+//    [self configureCell:cell atIndexPath:indexPath];
+//    
+//    return cell;
+//}
+//
+//// UITableViewDataSource protocol method 1
+//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return YES;
+//}
+//
+//// UITableViewDataSource protocol method 2
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (editingStyle == UITableViewCellEditingStyleDelete)
+//    {
+//        Task *record = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//        
+//        if (record)
+//        {
+//            [self.fetchedResultsController.managedObjectContext deleteObject:record];
+//        }
+//    }
+//    [self saveManagedObjectContext];
+//}
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+//{
+//    NSArray *sections = [self.fetchedResultsController sections];
+//    id<NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:section];
+//    
+//    return [sectionInfo numberOfObjects];
+//}
+//
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+//{
+//    return [[self.fetchedResultsController sections] count];
+//}
 
 - (void)configureCell:(ToDoCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
@@ -334,6 +371,8 @@
         NSLog(@"Unable to perform fetch.");
         NSLog(@"%@, %@", error, error.localizedDescription);
     }
+    
+    [self setupTableViewDataSource];
     // Do any additional setup after loading the view, typically from a nib.
 }
 

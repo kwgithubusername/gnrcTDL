@@ -12,11 +12,11 @@
 #import <CoreData/Coredata.h>
 #import "ListCell.h"
 #import "List.h"
-#import "TDLViewControllerListDataSource.h"
+#import "TDLTableViewDataSource.h"
 
 @interface TDLListViewController ()<NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic) TDLViewControllerListDataSource *dataSource;
+@property (nonatomic) TDLTableViewDataSource *dataSource;
 
 
 @end
@@ -130,10 +130,12 @@
 
 #pragma mark Table View Delegate Methods
 
--(void)setupTableView
+-(void)setupTableViewDataSource
 {
-    void (^configureCellBlock)(id cell, id indexPath) = ^(ListCell *cell, NSIndexPath *indexPath) {
+    ListCell* (^configureCellBlock)(id indexPath) = ^ListCell*(NSIndexPath *indexPath) {
+        ListCell *cell = (ListCell *)[self.tableView dequeueReusableCellWithIdentifier:@"ListCell" forIndexPath:indexPath];
         [self configureCell:cell atIndexPath:indexPath];
+        return cell;
     };
     
     void (^deleteCellBlock)(id indexPath) = ^(NSIndexPath *indexPath) {
@@ -159,7 +161,7 @@
         return [[self.fetchedResultsController sections] count];
     };
     
-    self.dataSource = [[TDLViewControllerListDataSource alloc] initWithConfigureCellBlock:configureCellBlock DeleteCellBlock:deleteCellBlock NumberOfRowsInSectionBlock:numberOfRowsInSectionBlock NumberOfSectionsBlock:numberOfSectionsBlock];
+    self.dataSource = [[TDLTableViewDataSource alloc] initWithConfigureCellBlock:configureCellBlock DeleteCellBlock:deleteCellBlock NumberOfRowsInSectionBlock:numberOfRowsInSectionBlock NumberOfSectionsBlock:numberOfSectionsBlock];
     
     self.tableView.dataSource = self.dataSource;
     self.tableView.delegate = self.dataSource;
@@ -300,7 +302,7 @@
         NSLog(@"%@, %@", error, error.localizedDescription);
     }
     
-    [self setupTableView];
+    [self setupTableViewDataSource];
 }
 
 - (void)didReceiveMemoryWarning

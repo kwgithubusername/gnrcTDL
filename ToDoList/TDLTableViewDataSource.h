@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^ConfigureCellBlock)(id cell, id indexPath);
+typedef UITableViewCell* (^ConfigureCellBlock)(id indexPath);
 typedef void (^DeleteCellBlock)(id indexPath);
 typedef NSInteger (^NumberOfRowsInSectionBlock)(NSInteger section);
 typedef NSInteger (^NumberOfSectionsBlock)();
 
-@interface TDLViewControllerListDataSource : NSObject <UITableViewDataSource, UITableViewDelegate>
+@interface TDLTableViewDataSource : NSObject <UITableViewDataSource, UITableViewDelegate>
 
 -(id)initWithConfigureCellBlock:(ConfigureCellBlock)aConfigureCellBlock
                 DeleteCellBlock:(DeleteCellBlock)aDeleteCellBlock

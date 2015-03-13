@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface TDLTaskViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface TDLTaskViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) NSString *passedListName;
