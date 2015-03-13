@@ -7,8 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "TDLViewControllerList.h"
-#import "TDLViewController.h"
+#import "TDLListViewController.h"
+#import "TDLTaskViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -25,9 +25,9 @@
     
     // Configure View Controller
     
-    TDLViewControllerList *viewControllerList = (TDLViewControllerList *)[rootNavigationController topViewController];
+    TDLListViewController *viewControllerList = (TDLListViewController *)[rootNavigationController topViewController];
     
-    if ([viewControllerList isKindOfClass:[TDLViewControllerList class]]) {
+    if ([viewControllerList isKindOfClass:[TDLListViewController class]]) {
         [viewControllerList setManagedObjectContext:self.managedObjectContext];
 
     }

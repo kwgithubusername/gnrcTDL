@@ -7,21 +7,21 @@
 //
 // This is the working version. Cascade rule reversed and corrected.
 
-#import "TDLViewControllerList.h"
-#import "TDLViewController.h"
+#import "TDLListViewController.h"
+#import "TDLTaskViewController.h"
 #import <CoreData/Coredata.h>
 #import "ListCell.h"
 #import "List.h"
 #import "TDLViewControllerListDataSource.h"
 
-@interface TDLViewControllerList ()<NSFetchedResultsControllerDelegate>
+@interface TDLListViewController ()<NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic) TDLViewControllerListDataSource *dataSource;
 
 
 @end
 
-@implementation TDLViewControllerList
+@implementation TDLListViewController
 
 #pragma mark Add List
 
@@ -113,7 +113,7 @@
     if ([segue.identifier isEqualToString:@"TDLViewController"])
     {
         // Obtain Reference to View Controller
-        TDLViewController *vc = segue.destinationViewController;
+        TDLTaskViewController *vc = segue.destinationViewController;
         
         // Configure View Controller
         [vc setManagedObjectContext:self.managedObjectContext];
@@ -148,6 +148,7 @@
     };
     
     NSInteger (^numberOfRowsInSectionBlock)(NSInteger section) = ^NSInteger(NSInteger section) {
+        
         NSArray *sections = [self.fetchedResultsController sections];
         id<NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:section];
         

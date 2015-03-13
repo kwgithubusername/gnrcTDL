@@ -7,10 +7,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller List-->
+        <!--List View Controller-->
         <scene sceneID="U9E-qG-lTg">
             <objects>
-                <viewController id="hsk-xV-Snr" customClass="TDLViewControllerList" sceneMemberID="viewController">
+                <viewController id="hsk-xV-Snr" customClass="TDLListViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="E6h-xg-yJk"/>
                         <viewControllerLayoutGuide type="bottom" id="SoV-bl-mXV"/>
@@ -50,10 +50,6 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="hsk-xV-Snr" id="4N7-r2-iqa"/>
-                                    <outlet property="delegate" destination="hsk-xV-Snr" id="Pdw-bW-IEt"/>
-                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -81,10 +77,10 @@
             </objects>
             <point key="canvasLocation" x="1659" y="375"/>
         </scene>
-        <!--View Controller-->
+        <!--Task View Controller-->
         <scene sceneID="Aih-Sl-T6n">
             <objects>
-                <viewController id="L1N-Ln-Qnh" customClass="TDLViewController" sceneMemberID="viewController">
+                <viewController id="L1N-Ln-Qnh" customClass="TDLTaskViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Zao-2I-NoR"/>
                         <viewControllerLayoutGuide type="bottom" id="W7h-wb-cnP"/>
@@ -181,6 +177,10 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="L1N-Ln-Qnh" id="yOf-TY-Tyi"/>
+                                    <outlet property="delegate" destination="L1N-Ln-Qnh" id="myZ-7d-jl5"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Hi Range. All rights reserved.
 //
 
-#import "TDLViewController.h"
+#import "TDLTaskViewController.h"
 #import <CoreData/CoreData.h>
 #import "ToDoCell.h"
 #import "AddToDoViewController.h"
@@ -26,13 +26,13 @@
 // Search by title, tags, items to be completed this week, items within x mile radius
 // Write a Django backend to store and share your lists, become a full-stack iOS developer! ;)
 
-@interface TDLViewController () <NSFetchedResultsControllerDelegate>
+@interface TDLTaskViewController () <NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSIndexPath *selection;
 
 @end
 
-@implementation TDLViewController
+@implementation TDLTaskViewController
 
 
 
@@ -99,6 +99,7 @@
             }
             
             List *listNameRecord = result[0];
+            NSLog(@"ListnameRecord is %@", listNameRecord.listName);
             return listNameRecord;
         }];
     } else if ([segue.identifier isEqualToString:@"updateToDoViewController"])
@@ -137,7 +138,8 @@
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
-    switch (type) {
+    switch (type)
+    {
         case NSFetchedResultsChangeInsert:
         {
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
