@@ -211,6 +211,7 @@
 				TargetAttributes = {
 					9ECCF7851A33E65800F309E7 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = X7HZN828N4;
 					};
 					9ECCF7A11A33E65800F309E7 = {
 						CreatedOnToolsVersion = 6.1;

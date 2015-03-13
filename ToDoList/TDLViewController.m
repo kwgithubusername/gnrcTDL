@@ -50,6 +50,8 @@
 {
     if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound)
     {
+        // This if clause sees if the back button was pressed or screen was swiped away.  We know this is true because self is no longer
+        // in the navigation stack.
         if ([[self.tableView visibleCells] count] > 0)
         {
             Task *firstTask = [self.fetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];

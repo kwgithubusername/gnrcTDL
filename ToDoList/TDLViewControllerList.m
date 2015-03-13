@@ -26,59 +26,82 @@
 // Button located on top right of screen to enable user to add a list
 - (IBAction)addListButton:(UIBarButtonItem *)sender
 {
-    UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"New List"
+    UIAlertView *addListAlertView = [[UIAlertView alloc] initWithTitle:@"New List"
                                                           message:@""
                                                          delegate:self
                                                 cancelButtonTitle:@"Cancel"
                                                 otherButtonTitles:@"OK", nil];
-    myAlertView.alertViewStyle=UIAlertViewStylePlainTextInput;
-    [myAlertView show];
+    addListAlertView.alertViewStyle=UIAlertViewStylePlainTextInput;
+    UITextField* textField = [addListAlertView textFieldAtIndex:0];
+    textField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
+    addListAlertView.tag = 100;
+    [addListAlertView show];
 }
 
 // Adding a list
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     UITextField *listName = [alertView textFieldAtIndex:0];
-    if ([listName.text length])
+    
+    if (alertView.tag == 100)
     {
-        NSString *listNameString = listName.text;
-        NSLog(@"The name is %@",listNameString);
-        
-        // Create Entity
-        NSEntityDescription *entity = [NSEntityDescription entityForName:@"List" inManagedObjectContext:self.managedObjectContext];
-        
-        // Initialize Record
-        NSManagedObject *record = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:self.managedObjectContext];
-        
-        // Populate Record
-        [record setValue:listNameString forKey:@"listName"];
-            NSLog(@"No. of sections:%lu",(unsigned long)[[self.fetchedResultsController sections] count]);
-        
-        // Save Record
-        NSError *error = nil;
-        
-        if ([self.managedObjectContext save:&error])
+        if ([listName.text length] > 0 && buttonIndex != 0)
         {
-            // Dismiss View Controller
-            [self dismissViewControllerAnimated:YES completion:nil];
-            
-        } else
+            [self addListWithName:listName.text];
+        }
+        else if ([listName.text length] == 0 && buttonIndex != 0)
         {
-            if (error)
-            {
-                NSLog(@"Unable to save record.");
-                NSLog(@"%@, %@", error, error.localizedDescription);
-            }
-            
-            // Show Alert View
-            [[[UIAlertView alloc] initWithTitle:@"Warning" message:@"Your to-do could not be saved." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            UIAlertView *nothingEnteredAlertView = [[UIAlertView alloc] initWithTitle:@"Blank entry"
+                                                                              message:@"Please enter a description"
+                                                                             delegate:self
+                                                                    cancelButtonTitle:@"OK"
+                                                                    otherButtonTitles:nil];
+            nothingEnteredAlertView.tag = 101;
+            [nothingEnteredAlertView show];
         }
     }
-    else
-    {
-        NSLog(@"No name");
-    }
     
+    if (alertView.tag == 101)
+    {
+        [self addListButton:nil];
+    }
+
+    
+}
+
+- (void)addListWithName:(NSString *)nameString
+{
+    NSLog(@"The name is %@",nameString);
+    
+    // Create Entity
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"List" inManagedObjectContext:self.managedObjectContext];
+    
+    // Initialize Record
+    NSManagedObject *record = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:self.managedObjectContext];
+    
+    // Populate Record
+    [record setValue:nameString forKey:@"listName"];
+    NSLog(@"No. of sections:%lu",(unsigned long)[[self.fetchedResultsController sections] count]);
+    
+    // Save Record
+    NSError *error = nil;
+    
+    if ([self.managedObjectContext save:&error])
+    {
+        // Dismiss View Controller
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
+    } else
+    {
+        if (error)
+        {
+            NSLog(@"Unable to save record.");
+            NSLog(@"%@, %@", error, error.localizedDescription);
+        }
+        
+        // Show Alert View
+        [[[UIAlertView alloc] initWithTitle:@"Warning" message:@"Your to-do could not be saved." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }
 }
 
 #pragma mark Prepare For Segue
