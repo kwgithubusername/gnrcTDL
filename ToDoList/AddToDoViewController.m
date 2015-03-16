@@ -13,16 +13,57 @@
 @interface AddToDoViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, NSCoding>
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (weak, nonatomic) IBOutlet UIButton *locationButton;
+@property (weak, nonatomic) IBOutlet UIButton *dueDateButton;
+@property (nonatomic) UIDatePicker *datePicker;
+@property (nonatomic) BOOL dueDateSelected;
 
 @end
 
 @implementation AddToDoViewController
 
+- (void)clearDetailViews
+{
+    for (UIView *view in self.view.subviews)
+    {
+        if (view.tag == 110)
+        {
+            [view removeFromSuperview];
+        }
+    }
+}
+
+- (IBAction)dueDateButtonTapped:(UIButton *)sender
+{
+    [self clearDetailViews];
+    
+    if (!self.dueDateSelected)
+    {
+        CGRect pickerFrame = CGRectMake(0,self.view.frame.size.height/2,self.view.frame.size.width,self.view.frame.size.height/4);
+        
+        self.datePicker = [[UIDatePicker alloc] initWithFrame:pickerFrame];
+        self.datePicker.tag = 110;
+        [self.view addSubview:self.datePicker];
+        [sender setTitle:@"Save Date" forState:UIControlStateNormal];
+        self.dueDateSelected = YES;
+    }
+    else if (self.dueDateSelected)
+    {
+        self.dueDateSelected = NO;
+    }
+}
+
+-(void)saveDate:(NSDate *)date
+{
+    //self.dueDateButton.titleLabel.text = date
+}
+
+
 #pragma mark Saving Pictures
 /*
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    aCoder encodeObject:self.image forKey:<#(NSString *)#>
+    aCoder encodeObject:self.image forKey:
 }
 */
 #pragma mark Image View

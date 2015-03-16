@@ -132,33 +132,35 @@
 
 -(void)setupTableViewDataSource
 {
+    __weak TDLListViewController *weakSelf = self;
+    
     ListCell* (^configureCellBlock)(id indexPath) = ^ListCell*(NSIndexPath *indexPath) {
-        ListCell *cell = (ListCell *)[self.tableView dequeueReusableCellWithIdentifier:@"ListCell" forIndexPath:indexPath];
-        [self configureCell:cell atIndexPath:indexPath];
+        ListCell *cell = (ListCell *)[weakSelf.tableView dequeueReusableCellWithIdentifier:@"ListCell" forIndexPath:indexPath];
+        [weakSelf configureCell:cell atIndexPath:indexPath];
         return cell;
     };
     
     void (^deleteCellBlock)(id indexPath) = ^(NSIndexPath *indexPath) {
         
-        List *record = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        List *record = [weakSelf.fetchedResultsController objectAtIndexPath:indexPath];
         
         if (record)
         {
-            [self.fetchedResultsController.managedObjectContext deleteObject:record];
+            [weakSelf.fetchedResultsController.managedObjectContext deleteObject:record];
         }
-        [self saveManagedObjectContext];
+        [weakSelf saveManagedObjectContext];
     };
     
     NSInteger (^numberOfRowsInSectionBlock)(NSInteger section) = ^NSInteger(NSInteger section) {
         
-        NSArray *sections = [self.fetchedResultsController sections];
+        NSArray *sections = [weakSelf.fetchedResultsController sections];
         id<NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:section];
         
         return [sectionInfo numberOfObjects];
     };
     
     NSInteger (^numberOfSectionsBlock)() = ^NSInteger() {
-        return [[self.fetchedResultsController sections] count];
+        return [[weakSelf.fetchedResultsController sections] count];
     };
     
     self.dataSource = [[TDLTableViewDataSource alloc] initWithConfigureCellBlock:configureCellBlock DeleteCellBlock:deleteCellBlock NumberOfRowsInSectionBlock:numberOfRowsInSectionBlock NumberOfSectionsBlock:numberOfSectionsBlock];
