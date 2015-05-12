@@ -12,7 +12,6 @@
 		9EC919D21A34A4160072B01D /* List.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC919D11A34A4160072B01D /* List.m */; };
 		9EC919D81A34BA420072B01D /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC919D71A34BA420072B01D /* ToDoCell.m */; };
 		9EC919DB1A34BBB80072B01D /* AddToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC919DA1A34BBB80072B01D /* AddToDoViewController.m */; };
-		9EC92B431A4D04BE00106779 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC92B421A4D04BE00106779 /* ImageStore.m */; };
 		9EC9BF391A365A830050FBE2 /* UpdateToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC9BF381A365A830050FBE2 /* UpdateToDoViewController.m */; };
 		9ECCF78C1A33E65800F309E7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCF78B1A33E65800F309E7 /* main.m */; };
 		9ECCF78F1A33E65800F309E7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCF78E1A33E65800F309E7 /* AppDelegate.m */; };
@@ -47,8 +46,6 @@
 		9EC919D71A34BA420072B01D /* ToDoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoCell.m; sourceTree = "<group>"; };
 		9EC919D91A34BBB80072B01D /* AddToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddToDoViewController.h; sourceTree = "<group>"; };
 		9EC919DA1A34BBB80072B01D /* AddToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddToDoViewController.m; sourceTree = "<group>"; };
-		9EC92B411A4D04BD00106779 /* ImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageStore.h; sourceTree = "<group>"; };
-		9EC92B421A4D04BE00106779 /* ImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageStore.m; sourceTree = "<group>"; };
 		9EC9BF371A365A830050FBE2 /* UpdateToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateToDoViewController.h; sourceTree = "<group>"; };
 		9EC9BF381A365A830050FBE2 /* UpdateToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateToDoViewController.m; sourceTree = "<group>"; };
 		9ECCF7861A33E65800F309E7 /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,8 +122,6 @@
 				9EC9BF381A365A830050FBE2 /* UpdateToDoViewController.m */,
 				9EC919D91A34BBB80072B01D /* AddToDoViewController.h */,
 				9EC919DA1A34BBB80072B01D /* AddToDoViewController.m */,
-				9EC92B411A4D04BD00106779 /* ImageStore.h */,
-				9EC92B421A4D04BE00106779 /* ImageStore.m */,
 				9EC919D61A34BA420072B01D /* ToDoCell.h */,
 				9EC919D71A34BA420072B01D /* ToDoCell.m */,
 				9ECCF7B51A34037900F309E7 /* Model.xcdatamodeld */,
@@ -280,7 +275,6 @@
 				9EEC4E6D1A3915740014C3A8 /* TDLListViewController.m in Sources */,
 				9ECCF78C1A33E65800F309E7 /* main.m in Sources */,
 				9ECCF7B71A34037900F309E7 /* Model.xcdatamodeld in Sources */,
-				9EC92B431A4D04BE00106779 /* ImageStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

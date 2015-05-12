@@ -178,19 +178,7 @@
 {
     [self.tableView endUpdates];
 }
-/*
-- (void)moveItemAtIndex:(int)from toIndex:(int)to
-{
-    if (from == to) {
-        return;
-    }
-    NSMutableArray *listsCopy = [[self.fetchedResultsController sections] mutableCopy];
-    List *list = [listsCopy objectAtIndex:from];
-    [listsCopy removeObjectAtIndex:from];
-    [listsCopy insertObject:list atIndex:to];
-    [self saveManagedObjectContext];
-}
-*/
+
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
     switch (type)
