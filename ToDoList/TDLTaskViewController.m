@@ -297,13 +297,13 @@
     NSLog(@"%@", self.managedObjectContext);
     
     // Initialize Check All Button
-    UIButton *checkAllButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2, 0, 35, 35)];
-    [checkAllButton setTitle:@"Check All" forState:UIControlStateNormal];
-    [checkAllButton addTarget:self action:@selector(checkAll:) forControlEvents:UIControlEventTouchUpInside];
-    
-    // Configure Navigation Item
-    self.navigationItem.titleView = checkAllButton;
-    [self.view bringSubviewToFront:checkAllButton];
+//    UIButton *checkAllButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2, 0, 35, 35)];
+//    [checkAllButton setTitle:@"Check All" forState:UIControlStateNormal];
+//    [checkAllButton addTarget:self action:@selector(checkAll:) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    // Configure Navigation Item
+//    self.navigationItem.titleView = checkAllButton;
+//    [self.view bringSubviewToFront:checkAllButton];
     self.tableView.rowHeight = 44;
     
     // Initialize Fetch Request

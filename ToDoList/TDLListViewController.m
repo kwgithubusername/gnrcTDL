@@ -123,6 +123,7 @@
         ListCell *selectedCell = (ListCell *)[self.tableView cellForRowAtIndexPath:[self.tableView indexPathForSelectedRow]];
         NSLog(@"Selected Row:%ld", (long)[self.tableView indexPathForSelectedRow].row);
         vc.passedListName = selectedCell.nameLabel.text;
+        vc.navigationItem.title = vc.passedListName;
 
     }
         
